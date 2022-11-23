@@ -9,9 +9,9 @@ void gameinfo();
 void titledraw();
 
 int main() {
-	titledraw();
 	while (1)
 	{
+		titledraw();
 		int menucode = menudraw();
 		//menucode == 0 이 게임 시작
 		if (menucode == 1) {			// 게임 설명
