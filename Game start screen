@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <Windows.h>
+#include <conio.h>
+
+void gotoxy(int x, int y);
+int keyinput();
+int menudraw();
+void gameinfo();
+void titledraw();
+
+int main() {
+	titledraw();
+	while (1)
+	{
+		int menucode = menudraw();
+		//menucode == 0 이 게임 시작
+		if (menucode == 1) {			// 게임 설명
+			gameinfo();
+		}
+		else if (menucode == 2) {		// 게임 종료
+			return 0;
+		}
+		system("cls");
+	}
+	return 0;
+}
+
+int keyinput() {						//키보드 입력값 받기
+	int keybo = _getch();
+	if (keybo == 224) {
+		keybo = _getch();
+		switch (keybo) 
+		{
+		case 72:						//위쪽 
+			return 1;
+			break;
+		case 80:						//아래쪽
+			return 2;
+			break;
+		default:
+			break;
+		}
+	}
+	else if (keybo == 13) {				//엔터
+		return 3;
+	}
+}
+
+int menudraw() {						//메뉴 출력
+	int x = 10;
+	int y = 4;
+	gotoxy(x - 2, y);
+	printf("> 게임 시작");			//y == 4
+	gotoxy(x, y+1);
+	printf("게임 설명");			//y == 5
+	gotoxy(x, y+2);
+	printf("게임 종료");			//y == 6
+
+	while (1) {							// '>' 움직이기
+		int n = keyinput();
+		switch (n)
+		{
+		case 1:							//위쪽 키보드 눌렀을 때
+		{
+			if (y > 4) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, --y);
+				printf(">");
+			}
+			break;
+		}
+		case 2:							//아래쪽 키보드 눌렀을 때
+		{
+			if (y < 6) {
+				gotoxy(x - 2, y);
+				printf(" ");
+				gotoxy(x - 2, ++y);
+				printf(">");
+			}
+			break;
+		}
+		case 3:							//엔터 눌렀을 때
+			return y - 4;				//게임 시작에서 엔터시 y == 0, 게임 설명에서 엔터시 y == 1, 게임 종료에서 엔터시 y == 2
+		}
+	}
+}
+
+void gameinfo() {						//게임 설명
+	system("cls");
+	gotoxy(10, 2);
+	printf("2인용 줄다리기 게임\n");
+	gotoxy(15, 4);
+	printf("◆조작법◆\n");
+
+	gotoxy(30, 10);
+	printf("설명 마치기 --> Enter!");
+
+	while (1)
+	{
+		if (keyinput() == 3) {
+			break;
+		}
+	}
+}
+
+void titledraw() {
+	gotoxy(6, 2);
+	printf("●2인용 줄다리기 게임●");
+}
+
+void gotoxy(int x, int y){
+	COORD pos = { x,y };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
